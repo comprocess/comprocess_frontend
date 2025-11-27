@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprocess Travel - AI 여행 플래너</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🌍 Comprocess Travel</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">홈</a></li>
+                <li><a href="#travel-plan" class="nav-link">여행 일정</a></li>
+                <li><a href="#image-analyze" class="nav-link">이미지 분석</a></li>
+                <li><a href="#exchange-rate" class="nav-link">환율 예측</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="container">
+                <div class="hero">
+                    <h2>AI 기반 스마트 여행 플래너</h2>
+                    <p>여행 일정 생성부터 환율 예측까지, AI가 도와드립니다!</p>
+                    <div class="feature-cards">
+                        <div class="feature-card" onclick="navigateTo('travel-plan')">
+                            <div class="feature-icon">🗺️</div>
+                            <h3>여행 일정 생성</h3>
+                            <p>목적지와 예산을 입력하면 AI가 맞춤형 일정을 생성합니다</p>
+                        </div>
+                        <div class="feature-card" onclick="navigateTo('image-analyze')">
+                            <div class="feature-icon">🔍</div>
+                            <h3>이미지 분석</h3>
+                            <p>한국 관광지나 음식 사진을 AI가 분석해드립니다</p>
+                        </div>
+                        <div class="feature-card" onclick="navigateTo('exchange-rate')">
+                            <div class="feature-icon">💱</div>
+                            <h3>환율 예측</h3>
+                            <p>AI가 미래의 환율을 예측해드립니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Travel Plan Section -->
+        <section id="travel-plan" class="section">
+            <div class="container">
+                <h2>🗺️ AI 여행 일정 생성</h2>
+                <div class="content-wrapper">
+                    <div class="form-container">
+                        <form id="travel-plan-form">
+                            <div class="form-group">
+                                <label for="destination">목적지 *</label>
+                                <input type="text" id="destination" placeholder="예: 서울, 부산, 제주도" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="budget">예산 *</label>
+                                <input type="text" id="budget" placeholder="예: 100만원, 50만원" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="travel_date">여행 날짜 *</label>
+                                <input type="text" id="travel_date" placeholder="예: 2026-01-01 ~ 2026-01-03" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="preferences">선호사항 *</label>
+                                <input type="text" id="preferences" placeholder="예: 맛집, 카페, 쇼핑, 역사" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="extra">추가 요청사항 *</label>
+                                <textarea id="extra" placeholder="예: 호텔 추천 필요, 대중교통 이용" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="btn-text">일정 생성하기</span>
+                                <span class="btn-loading" style="display: none;">생성 중...</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="result-container">
+                        <div id="travel-plan-result" class="result-box">
+                            <p class="placeholder">여행 일정이 여기에 표시됩니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Analyze Section -->
+        <section id="image-analyze" class="section">
+            <div class="container">
+                <h2>🔍 한국 관광지/음식 이미지 AI 분석</h2>
+                <div class="content-wrapper">
+                    <div class="form-container">
+                        <form id="image-analyze-form">
+                            <div class="form-group">
+                                <label for="analyze-image">이미지 파일 *</label>
+                                <input type="file" id="analyze-image" accept="image/*" required>
+                                <div id="analyze-preview" class="image-preview"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="btn-text">이미지 분석하기</span>
+                                <span class="btn-loading" style="display: none;">분석 중...</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="result-container">
+                        <div id="image-analyze-result" class="result-box">
+                            <p class="placeholder">분석 결과가 여기에 표시됩니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exchange Rate Section -->
+        <section id="exchange-rate" class="section">
+            <div class="container">
+                <h2>💱 AI 환율 예측</h2>
+                <div class="content-wrapper">
+                    <div class="form-container">
+                        <form id="exchange-rate-form">
+                            <div class="form-group">
+                                <label for="year">예측할 년도 *</label>
+                                <input type="number" id="year" min="2000" max="2100" placeholder="예: 2026" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="month">예측할 월 *</label>
+                                <select id="month" required>
+                                    <option value="">월 선택</option>
+                                    <option value="1">1월</option>
+                                    <option value="2">2월</option>
+                                    <option value="3">3월</option>
+                                    <option value="4">4월</option>
+                                    <option value="5">5월</option>
+                                    <option value="6">6월</option>
+                                    <option value="7">7월</option>
+                                    <option value="8">8월</option>
+                                    <option value="9">9월</option>
+                                    <option value="10">10월</option>
+                                    <option value="11">11월</option>
+                                    <option value="12">12월</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">국가 선택 *</label>
+                                <select id="country" required>
+                                    <option value="">국가 선택</option>
+                                    <option value="미국">🇺🇸 미국 (USD)</option>
+                                    <option value="일본">🇯🇵 일본 (JPY)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="btn-text">환율 예측하기</span>
+                                <span class="btn-loading" style="display: none;">예측 중...</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="result-container">
+                        <div id="exchange-rate-result" class="result-box">
+                            <p class="placeholder">환율 예측 결과가 여기에 표시됩니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Comprocess Travel. All rights reserved.</p>
+            <p>Powered by AI - Django REST Framework, OpenAI GPT-4, TensorFlow LSTM</p>
+        </div>
+    </footer>
+
+    <script src="scripts/api.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
