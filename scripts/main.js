@@ -18,14 +18,58 @@ function navigateTo(sectionId) {
         targetLink.classList.add('active');
     }
     
+    // 마이페이지 접근 시 데이터 로드
+    if (sectionId === 'mypage') {
+        if (!Auth.isAuthenticated()) {
+            alert('로그인이 필요합니다.');
+            navigateTo('login');
+            return;
+        }
+        loadMyPageData();
+    }
+    
     // Scroll to top
     window.scrollTo(0, 0);
 }
 
+// Update UI based on authentication status
+function updateAuthUI() {
+    const isLoggedIn = Auth.isAuthenticated();
+    const navAuth = document.getElementById('nav-auth');
+    const navLogout = document.getElementById('nav-logout');
+    const navMypage = document.getElementById('nav-mypage');
+    
+    if (isLoggedIn) {
+        navAuth.style.display = 'none';
+        navLogout.style.display = 'block';
+        navMypage.style.display = 'block';
+        
+        const userInfo = Auth.getUserInfo();
+        const logoutLink = navLogout.querySelector('a');
+        logoutLink.innerHTML = `${userInfo.username}님 (로그아웃)`;
+    } else {
+        navAuth.style.display = 'block';
+        navLogout.style.display = 'none';
+        navMypage.style.display = 'none';
+    }
+}
+
+// Logout handler
+function handleLogout(event) {
+    event.preventDefault();
+    Auth.clearTokens();
+    updateAuthUI();
+    alert('로그아웃되었습니다.');
+    navigateTo('home');
+}
+
 // Setup navigation
 document.addEventListener('DOMContentLoaded', () => {
+    updateAuthUI();
+    
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
+            if (link.getAttribute('onclick')) return; // Skip if has onclick
             e.preventDefault();
             const sectionId = link.getAttribute('href').substring(1);
             navigateTo(sectionId);
@@ -76,7 +120,8 @@ document.getElementById('travel-plan-form').addEventListener('submit', async (e)
         const result = await API.createTravelPlan(data);
         displayTravelPlanResult(result, resultContainer);
     } catch (error) {
-        showError(resultContainer, error.message);
+        console.error('Travel plan creation error:', error);
+        showError(resultContainer, error.message + '<br><br>백엔드 서버가 실행 중인지 확인해주세요.');
     } finally {
         hideLoading(button);
     }
